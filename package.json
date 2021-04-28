@@ -1,5 +1,5 @@
 {
-  "name": "dummy-sensors",
+  "name": "dummy-sensor-data",
   "version": "0.1.0",
   "private": true,
   "main": "src/index.tsx",
@@ -12,6 +12,16 @@
   },
   "repository": "github:Waziup/dummy-sensor-data",
   "author": "Mojtaba Eskandari <mojtaba.eskandari@waziup.org>",
+  "waziapp": {
+		"icon": "icon.svg",
+		"menu": {
+			"HelloWorldJS": {
+				"primary": "Dummy Data Generator",
+				"icon": "./menu-icon.svg",
+				"href": "#/apps/waziup.dummy-sensor-data/"
+			}
+		}
+	},
   "dependencies": {
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.22",
