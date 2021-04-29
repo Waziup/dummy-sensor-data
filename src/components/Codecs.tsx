@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     codec: {
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 /**-------------------- */
 
 type Props = {
-    onChange: (codec: string) => void;
+    onChange?: (codec: string) => void;
 };
 
 
@@ -39,19 +38,23 @@ const Codecs = ({ onChange }: Props) => {
 
     const [codecsList, setCodecsList] = useState(null);
     const loadCodecsList = async () => {
-        fetch(`/codecs`, {
+
+        // const server = window.location.protocol + "//" + window.location.hostname;
+
+        let resp = await fetch(`/codecs`, {
             headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(resp => {
-            resp.json().then(data => {
-                setCodecsList(data);
-            }, (err: Error) => {
-                console.error("There was an error decoding codecs:\n" + err)
-            });
-        }, (err: Error) => {
-            console.error("There was an error loading codecs:\n" + err)
+                "Content-Type": "application/json; charset=utf-8"
+            }
         });
+        const contentType = resp.headers.get("Content-Type");
+        const isJson = contentType?.startsWith("application/json");
+        if (resp.ok) {
+            var data = await resp.json();
+            setCodecsList(data);
+        } else {
+            var text = await resp.text();
+            throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
+        }
     }
 
     /*------------ */

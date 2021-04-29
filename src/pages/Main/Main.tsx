@@ -5,8 +5,6 @@ import { Button, Container, FormControl, FormGroup, FormLabel, makeStyles, TextF
 import Codecs from "../../components/Codecs"
 import LinearProgressWithLabel from "../../components/LinearProgressWithLabel"
 
-import './Main.css';
-
 import deviceNames from "../../data/deviceNames/names.json";
 import ontologies from "../../data/ontologies/ontologies.json";
 
@@ -95,92 +93,6 @@ export default function Main() {
   } as formValuesType);
 
   const [selectedCodec, setSelectedCodec] = useState(null);
-
-  /**------------- */
-
-  const getRandomSensor = (): SensorType => {
-
-    const sensingDevicesKeys = Object.keys(ontologies.sensingDevices);
-    const randomKindId = Math.floor(Math.random() * sensingDevicesKeys.length);
-
-    const randomKind = sensingDevicesKeys[randomKindId];
-    const randomSensor = ontologies.sensingDevices[sensingDevicesKeys[randomKindId]];
-
-    const randomQuantity = randomSensor.quantities.length ? randomSensor.quantities[Math.floor(Math.random() * randomSensor.quantities.length)] : "";
-    const randomUnitId = randomQuantity ? Math.floor(Math.random() * ontologies.quantities[randomQuantity].units.length) : null;
-    const randomUnit = randomUnitId !== null ? ontologies.quantities[randomQuantity].units[randomUnitId] : "";
-
-    return {
-      "name": randomSensor.label,
-      "meta": {
-        "kind": randomKind,
-        "quantity": randomQuantity,
-        "unit": randomUnit,
-      }
-    }
-  }
-
-  /**------------- */
-
-  const getRandomDeviceName = (): string => {
-    const randomDeviceId = Math.floor(Math.random() * deviceNames.length);
-    return deviceNames[randomDeviceId];
-  }
-
-  /**------------- */
-
-  const getRandomValue = (min: number, max: number) => {
-    return Math.round(Math.random() * (max - min) + min);
-  }
-
-  /**------------- */
-
-  const postAPI = async (path: string, val: any) => {
-    let resp = await fetch(path, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      body: JSON.stringify(val),
-    });
-    const contentType = resp.headers.get("Content-Type");
-    const isJson = contentType?.startsWith("application/json");
-    if (!resp.ok) {
-      if (isJson) {
-        var data = await resp.json();
-        throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
-      } else {
-        var text = await resp.text();
-        throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
-      }
-    }
-    return isJson ? resp.json() : resp.text();
-  }
-
-  /**------------- */
-
-  const getAPI = async (path: string) => {
-    let resp = await fetch(path, {
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      }
-    });
-    const contentType = resp.headers.get("Content-Type");
-    const isJson = contentType?.startsWith("application/json");
-    if (!resp.ok) {
-      if (isJson) {
-        var data = await resp.json();
-        throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
-      } else {
-        var text = await resp.text();
-        throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
-      }
-    }
-    return isJson ? resp.json() : resp.text();
-  }
-
-  /**------------- */
-
   const [progress, setProgress] = useState(0);
 
   const startDataGenerator = async () => {
@@ -318,3 +230,90 @@ export default function Main() {
     </div >
   );
 }
+
+/**---------------- */
+
+/**------------- */
+
+export const getRandomSensor = (): SensorType => {
+
+  const sensingDevicesKeys = Object.keys(ontologies.sensingDevices);
+  const randomKindId = Math.floor(Math.random() * sensingDevicesKeys.length);
+
+  const randomKind = sensingDevicesKeys[randomKindId];
+  const randomSensor = ontologies.sensingDevices[sensingDevicesKeys[randomKindId]];
+
+  const randomQuantity = randomSensor.quantities.length ? randomSensor.quantities[Math.floor(Math.random() * randomSensor.quantities.length)] : "";
+  const randomUnitId = randomQuantity ? Math.floor(Math.random() * ontologies.quantities[randomQuantity].units.length) : null;
+  const randomUnit = randomUnitId !== null ? ontologies.quantities[randomQuantity].units[randomUnitId] : "";
+
+  return {
+    "name": randomSensor.label,
+    "meta": {
+      "kind": randomKind,
+      "quantity": randomQuantity,
+      "unit": randomUnit,
+    }
+  }
+}
+
+/**------------- */
+
+export const getRandomDeviceName = (): string => {
+  const randomDeviceId = Math.floor(Math.random() * deviceNames.length);
+  return deviceNames[randomDeviceId];
+}
+
+/**------------- */
+
+export const getRandomValue = (min: number, max: number) => {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+/**------------- */
+
+export const postAPI = async (path: string, val: any) => {
+  let resp = await fetch(path, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify(val),
+  });
+  const contentType = resp.headers.get("Content-Type");
+  const isJson = contentType?.startsWith("application/json");
+  if (!resp.ok) {
+    if (isJson) {
+      var data = await resp.json();
+      throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
+    } else {
+      var text = await resp.text();
+      throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
+    }
+  }
+  return isJson ? resp.json() : resp.text();
+}
+
+/**------------- */
+
+export const getAPI = async (path: string) => {
+  let resp = await fetch(path, {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  });
+  const contentType = resp.headers.get("Content-Type");
+  const isJson = contentType?.startsWith("application/json");
+  if (!resp.ok) {
+    if (isJson) {
+      var data = await resp.json();
+      throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
+    } else {
+      var text = await resp.text();
+      throw `HTTP Error ${resp.status} ${resp.statusText}\n${data}`;
+    }
+  }
+  return isJson ? resp.json() : resp.text();
+}
+
+/**------------- */

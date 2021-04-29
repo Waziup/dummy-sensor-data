@@ -4,7 +4,9 @@
   "private": true,
   "main": "src/index.tsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "test-coverage": "jest --coverage",
     "build-dev": "npx webpack --env dev",
     "build": "npx webpack --env prod",
     "watch": "npx webpack --watch --env prod",
@@ -13,19 +15,28 @@
   "repository": "github:Waziup/dummy-sensor-data",
   "author": "Mojtaba Eskandari <mojtaba.eskandari@waziup.org>",
   "waziapp": {
-		"icon": "icon.svg",
-		"menu": {
-			"HelloWorldJS": {
-				"primary": "Dummy Data Generator",
-				"icon": "./menu-icon.svg",
-				"href": "#/apps/waziup.dummy-sensor-data/"
-			}
-		}
-	},
+    "icon": "icon.svg",
+    "menu": {
+      "HelloWorldJS": {
+        "primary": "Dummy Data Generator",
+        "icon": "./menu-icon.svg",
+        "href": "#/apps/waziup.dummy-sensor-data/"
+      }
+    }
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  },
   "dependencies": {
     "@testing-library/user-event": "^12.8.3",
-    "@types/jest": "^26.0.22",
-    "@types/node": "^12.20.10",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "loader-utils": "^2.0.0",
@@ -41,21 +52,28 @@
     "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
+    "@types/jest": "^26.0.23",
     "@types/material-ui": "^0.21.8",
+    "@types/node": "^15.0.1",
     "@types/react-tap-event-plugin": "^0.0.30",
+    "@types/react-test-renderer": "^17.0.1",
+    "@types/supertest": "^2.0.11",
+    "babel-jest": "^26.6.3",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.3.0",
     "file-loader": "^6.1.1",
+    "jest": "^26.6.0",
+    "node-fetch": "^2.6.1",
     "postcss": "^7.0.35",
     "react-test-renderer": "^17.0.2",
     "sass": "^1.32.11",
     "source-map-loader": "^2.0.1",
     "style-loader": "^1.3.0",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.5",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",
     "url-loader": "^4.1.1",
-    "webpack": "^5.36.0",
-    "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.1"
+    "webpack-cli": "^4.6.0"
   }
 }

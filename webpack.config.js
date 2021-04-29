@@ -1,4 +1,5 @@
 const path = require("path");
+// const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { merge } = require("webpack-merge");
 
@@ -11,9 +12,8 @@ const common = {
 	entry: [`./src/index.tsx`],
 
 	plugins: [
-		new MiniCssExtractPlugin({
-			filename: `index.css`,
-		}),
+		new MiniCssExtractPlugin({filename: `index.css`}),
+		// new webpack.HotModuleReplacementPlugin(),
 	],
 
 	module: {
@@ -81,7 +81,12 @@ const common = {
 			react: "React",
 			"react-dom": "ReactDOM",
 		},
-	]
+	],
+
+	devServer: {
+		contentBase: path.resolve(__dirname, './dist'),
+		hot: true,
+	  },
 };
 
 module.exports = (env) => {

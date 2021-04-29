@@ -8,9 +8,6 @@ COPY index.html \
     favicon.ico
 
 COPY dist dist
-COPY docs docs
-COPY admin admin
-
 
 #This command puts only the required files in the index.zip file which is good for production
 RUN zip /index.zip docker-compose.yml package.json
