@@ -81,11 +81,11 @@ export default function Main() {
   const classes = useStyles();
 
   const [formValues, setFormValues] = useState({
-    numDevices: 10,
+    numDevices: 1,
     minSensors: 1,
     maxSensors: 5,
-    minValues: -1000,
-    maxValues: 1000,
+    minValues: -10,
+    maxValues: 100,
     minEntries: 5,
     maxEntries: 10,
     minTime: 10,
@@ -96,6 +96,14 @@ export default function Main() {
   const [progress, setProgress] = useState(0);
 
   const startDataGenerator = async () => {
+
+    // var mu = [0, 0],
+    //   sigma = [0.25, 0.5],
+    //   correlation = [[1.0, 0.5], [0.5, 1.0]];
+
+    // var data = generateCorrLognorm(100, mu, sigma, correlation);
+
+    // return;
 
     for (let d = 0; d < formValues.numDevices; d++) {
       setProgress(Math.round(100 * d / formValues.numDevices));
@@ -131,8 +139,9 @@ export default function Main() {
       const numOfEntries = getRandomValue(formValues.minEntries, formValues.maxEntries);
       let timeSet = [];
       let nowObj = new Date();
+      // Let's enter the values in the near past
+      nowObj.setMinutes(nowObj.getMinutes() - formValues.maxTime * numOfEntries);
       for (let e = 0; e < numOfEntries; e++) {
-
         const delayInMinutes = getRandomValue(formValues.minTime, formValues.maxTime);
         nowObj.setMinutes(nowObj.getMinutes() + delayInMinutes);
         timeSet.push(nowObj.toISOString());
@@ -144,9 +153,10 @@ export default function Main() {
 
         const sensorID = sensor['id'];
 
+        const randomValues = getCorrRdandomValues(numOfEntries, formValues.minValues, formValues.maxValues);
         let sensorValues = [];
         for (let e = 0; e < numOfEntries; e++) {
-          const value = getRandomValue(formValues.minValues, formValues.maxValues);
+          const value = randomValues[e];
           const time = timeSet[e];
           sensorValues.push({ value, time });
         }
@@ -233,8 +243,6 @@ export default function Main() {
 
 /**---------------- */
 
-/**------------- */
-
 export const getRandomSensor = (): SensorType => {
 
   const sensingDevicesKeys = Object.keys(ontologies.sensingDevices);
@@ -268,6 +276,24 @@ export const getRandomDeviceName = (): string => {
 
 export const getRandomValue = (min: number, max: number) => {
   return Math.round(Math.random() * (max - min) + min);
+}
+
+/**------------- */
+
+export const getCorrRdandomValues = (count: number, min: number, max: number) => {
+
+  let output: number[] = [];
+  output.push(Math.round(Math.random() * (max - min) + min));
+  for (let i = 1; i < count; i++) {
+    let localMin = output[i - 1] - (max - min) * 0.05; // Near numbers with max 5% distance
+    let localMax = output[i - 1] + (max - min) * 0.05;
+    localMin = localMin < min ? min : localMin;
+    localMax = localMax > max ? max : localMax;
+    const newNumber = Math.random() * (localMax - localMin) + localMin;
+    output.push(Math.round(newNumber));
+  }
+  // console.log(count, output);
+  return output;
 }
 
 /**------------- */
